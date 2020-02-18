@@ -13,6 +13,14 @@
         "image": "lukondefmwila/multi-container-api",
         "hostname": "api",
         "essential": false,
+        "links": ["postgres"],
+        "memory": 128
+      },
+      {
+        "name": "postgres",
+        "image": "lukondefmwila/multi-container-db",
+        "hostname": "postgres",
+        "essential": false,
         "memory": 128
       },
       {
