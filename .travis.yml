@@ -14,23 +14,23 @@ script:
 after_success:
   - docker build -t lukondefmwila/multi-container-client ./client
   - docker build -t lukondefmwila/multi-container-api ./api
-  - docker build -t lukondefmwila/multi-container-db --build-arg buildtime_pg_db=$PG_DB --build-arg buildtime_pg_user=$PG_USER --build-arg buildtime_pg_pw=$PG_PW ./postgres
+  #- docker build -t lukondefmwila/multi-container-db --build-arg buildtime_pg_db=$PG_DB --build-arg buildtime_pg_user=$PG_USER --build-arg buildtime_pg_pw=$PG_PW ./postgres
   - docker build -t lukondefmwila/multi-container-nginx ./nginx
   # Log in to the Docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take these images and push them to Docker hub
   - docker push lukondefmwila/multi-container-client
   - docker push lukondefmwila/multi-container-api
-  - docker push lukondefmwila/multi-container-db
+  #- docker push lukondefmwila/multi-container-db
   - docker push lukondefmwila/multi-container-nginx
 
 deploy:
   provider: elasticbeanstalk
   region: eu-west-1
-  app: nginx-react-express-postgres
-  env: NginxReactExpressPostgres-env
+  app: nginx-react-express
+  env: NginxReactExpress-env
   bucket_name: elasticbeanstalk-eu-west-1-776008521384
-  bucket_path: react-express-postgres-app
+  bucket_path: nginx-react-express-app
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY

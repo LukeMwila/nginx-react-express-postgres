@@ -7,7 +7,7 @@ function App() {
   React.useEffect(() => {
     const getToDoItems = async () => {
       const response = await fetch(
-        `${process.env.REACT_APP_TO_DO_ITEMS_API}`
+        `/api/v1/items`
       );
 
       const items = await response.json();

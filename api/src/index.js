@@ -8,7 +8,7 @@ const cors = require('cors');
 const uuid = require('uuid/v4');
 
 // Config
-const config = require('./config');
+// const config = require('./config');
 
 // Initialization
 const app = express();
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Postgres client
-const { Pool } = require('pg');
+/*const { Pool } = require('pg');
 const pgClient = new Pool({
   user: config.pgUser,
   host: config.pgHost,
@@ -38,7 +38,7 @@ pgClient
 `
   )
   .catch(err => console.log(err));
-
+*/
 // Express route handlers
 app.get('/test', (req, res) => {
   res.send('Working!');
@@ -46,12 +46,14 @@ app.get('/test', (req, res) => {
 
 // Get all to do list items
 app.get('/v1/items', async (req, res) => {
-  const items = await pgClient.query('SELECT * FROM items');
-  res.status(200).send(items.rows);
+  //const items = await pgClient.query('SELECT * FROM items');
+  res.status(200).send([{
+    item_name: "Do something"
+  }]);
 });
 
 // Get a single todo item
-app.get('/v1/items', async (req, res) => {
+/*app.get('/v1/items', async (req, res) => {
   const id = req.params.id;
 
   const items = await pgClient
@@ -115,7 +117,7 @@ app.delete('/v1/items/:id', async (req, res) => {
 
   res.status(200).send(`Item deleted with ID: ${id}`);
 });
-
+*/
 // Server
 const port = process.env.PORT || 3001;
 const server = http.createServer(app);

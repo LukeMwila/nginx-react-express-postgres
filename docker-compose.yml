@@ -13,7 +13,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - /app/node_modules
       - ./client:/app
@@ -22,8 +22,8 @@ services:
     restart: on-failure
     container_name: client
   api:
-    depends_on:
-      - postgres
+    #depends_on:
+    #  - postgres
     build:
       context: ./api
       dockerfile: Dockerfile.dev
@@ -36,7 +36,7 @@ services:
       - ./api:/app # Look at the api directory and copy everything into the app folder in the container
     env_file:
       - ./api-secrets.env
-  postgres:
-    image: postgres:latest
-    env_file:
-      - ./postgres-secrets.env
+  #postgres:
+   # image: postgres:latest
+   # env_file:
+   #   - ./postgres-secrets.env
