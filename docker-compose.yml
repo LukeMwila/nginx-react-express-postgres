@@ -1,32 +1,42 @@
 version: '3'
 services:
-  postgres:
-    image: postgres:latest
-  web-app:
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always # because it is routing traffic to our entire app
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3002:80'
+  client:
     build:
       context: ./client
       dockerfile: Dockerfile.dev
     volumes:
       - /app/node_modules
       - ./client:/app
-    ports:
-      - '3000:3000'
+    #ports:
+    #  - '3000:3000'
     restart: on-failure
-    container_name: web-app
-  to-do-api:
+    container_name: client
+  api:
+    depends_on:
+      - postgres
     build:
-      context: ./server
+      context: ./api
       dockerfile: Dockerfile.dev
-    ports:
-      - '3001:3001'
+    #ports:
+    #  - '3001:3001'
     restart: on-failure
-    container_name: to-do-api
+    container_name: api
     volumes:
       - /app/node_modules # Inside the container, don't try to override this folder, just leave as is
-      - ./server:/app # Look at the server directory and copy everything into the app folder in the container
-    environment:
-      - PGUSER=postgres
-      - PGHOST=postgres
-      - PGDATABASE=postgres
-      - PGPASSWORD=
-      - PGPORT=5432
+      - ./api:/app # Look at the api directory and copy everything into the app folder in the container
+    env_file:
+      - ./api-secrets.env
+  postgres:
+    image: postgres:latest
+    env_file:
+      - ./postgres-secrets.env

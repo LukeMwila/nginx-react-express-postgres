@@ -1,0 +1,41 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "client",
+        "image": "lukondefmwila/multi-container-client",
+        "hostname": "client",
+        "essential": false,
+        "memory": 128
+      },
+      {
+        "name": "api",
+        "image": "lukondefmwila/multi-container-api",
+        "hostname": "api",
+        "essential": false,
+        "links": ["postgres"],
+        "memory": 128
+      },
+      {
+        "name": "postgres",
+        "image": "lukondefmwila/multi-container-db",
+        "hostname": "postgres",
+        "essential": false,
+        "memory": 128
+      },
+      {
+        "name": "nginx",
+        "image": "lukondefmwila/multi-container-nginx",
+        "hostname": "nginx",
+        "essential": true,
+        "portMappings": [
+          {
+            "hostPort": 80,
+            "containerPort": 80
+          }
+        ],
+        "links": ["client", "api"],
+        "memory": 128
+      }
+    ]
+  }
